@@ -7,6 +7,27 @@ declare global { interface Window { Telegram?: { WebApp?: { initData: string } }
 
 const DELIVERY_FEE = 3
 
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  background: 'var(--surface)',
+  color: 'var(--text)',
+  fontSize: 13,
+  borderRadius: 'var(--radius)',
+  padding: '10px 12px',
+  outline: 'none',
+  border: '1px solid var(--border)',
+  resize: 'none' as const,
+  fontFamily: 'inherit',
+}
+
+const labelStyle: React.CSSProperties = {
+  fontSize: 9,
+  letterSpacing: '.14em',
+  textTransform: 'uppercase' as const,
+  color: 'var(--text-3)',
+  fontWeight: 500,
+}
+
 export default function CheckoutPage() {
   const router = useRouter()
   const { items, total, clear } = useCartStore()
@@ -37,37 +58,81 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="px-4 py-4 flex flex-col gap-4 min-h-screen">
-      <div className="flex items-center gap-2">
-        <button onClick={() => router.back()} className="text-[var(--text-muted)] text-sm">←</button>
-        <h1 className="text-white font-bold text-lg">Checkout</h1>
+    <div style={{ minHeight: '100svh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
+
+      {/* Header */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 12,
+        padding: '14px 16px', borderBottom: '1px solid var(--border)', background: 'var(--surface)',
+      }}>
+        <button onClick={() => router.back()} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 16, color: 'var(--text)' }}>←</button>
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--text)' }}>
+          Checkout
+        </span>
       </div>
-      <div className="flex flex-col gap-3">
-        <label className="text-[var(--text-muted)] text-xs uppercase tracking-wider">Dirección de entrega *</label>
-        <textarea value={address} onChange={(e) => setAddress(e.target.value)} placeholder="Calle, número, barrio, ciudad..." rows={3} className="bg-[var(--surface)] text-white text-sm rounded-[var(--radius)] p-3 resize-none outline-none placeholder:text-[var(--text-muted)]" />
-        <label className="text-[var(--text-muted)] text-xs uppercase tracking-wider">Nota al repartidor (opcional)</label>
-        <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Apto 201, timbre no funciona..." className="bg-[var(--surface)] text-white text-sm rounded-[var(--radius)] p-3 outline-none placeholder:text-[var(--text-muted)]" />
-      </div>
-      <div className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-col gap-1.5">
-        {items.map((i) => (
-          <div key={i.product_id} className="flex justify-between text-sm">
-            <span className="text-[var(--text-muted)]">{i.name} ×{i.qty}</span>
-            <span className="text-white">${(i.price * i.qty).toFixed(2)}</span>
+
+      <div style={{ flex: 1, padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+        {/* Address form */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <span style={labelStyle}>Dirección de entrega *</span>
+          <textarea
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Calle, número, barrio, ciudad..."
+            rows={3}
+            style={inputStyle}
+          />
+          <span style={labelStyle}>Nota al repartidor (opcional)</span>
+          <input
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="Apto 201, timbre no funciona..."
+            style={inputStyle}
+          />
+        </div>
+
+        {/* Order summary */}
+        <div style={{ background: 'var(--surface)', border: '1px solid var(--border)', padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <span style={labelStyle}>Resumen</span>
+          {items.map((i) => (
+            <div key={i.product_id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
+              <span style={{ color: 'var(--text-2)' }}>{i.name} ×{i.qty}</span>
+              <span style={{ color: 'var(--text)' }}>${(i.price * i.qty).toFixed(2)}</span>
+            </div>
+          ))}
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, borderTop: '1px solid var(--border)', paddingTop: 8, marginTop: 4 }}>
+            <span style={{ color: 'var(--text-2)' }}>Envío</span>
+            <span style={{ color: 'var(--text)' }}>${DELIVERY_FEE.toFixed(2)}</span>
           </div>
-        ))}
-        <div className="flex justify-between text-sm border-t border-[var(--border)] pt-2 mt-1">
-          <span className="text-[var(--text-muted)]">Delivery</span>
-          <span className="text-white">${DELIVERY_FEE.toFixed(2)}</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 700, fontSize: 14 }}>
+            <span style={{ color: 'var(--text)' }}>Total</span>
+            <span style={{ color: 'var(--accent-dark)' }}>${grandTotal.toFixed(2)}</span>
+          </div>
         </div>
-        <div className="flex justify-between font-bold">
-          <span className="text-white">Total</span>
-          <span className="text-[var(--accent)]">${grandTotal.toFixed(2)}</span>
-        </div>
+
+        {error && <p style={{ color: '#e53935', fontSize: 12 }}>{error}</p>}
       </div>
-      {error && <p className="text-red-400 text-sm">{error}</p>}
-      <button onClick={handleSubmit} disabled={loading} className="w-full bg-[var(--accent)] text-[var(--accent-fg)] font-bold rounded-[var(--radius)] py-3 disabled:opacity-50">
-        {loading ? 'Procesando...' : `Confirmar pedido · $${grandTotal.toFixed(2)}`}
-      </button>
+
+      {/* Footer CTA */}
+      <div style={{ padding: '12px 16px', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+        <button
+          onClick={handleSubmit}
+          disabled={loading}
+          style={{
+            width: '100%', height: 46,
+            background: 'var(--text)', color: 'var(--surface)',
+            border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.5 : 1,
+            fontSize: 11, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase',
+            borderRadius: 'var(--radius)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          }}
+        >
+          {loading ? 'PROCESANDO...' : (
+            <>CONFIRMAR PEDIDO · <span style={{ color: 'var(--accent)', fontWeight: 700 }}>${grandTotal.toFixed(2)}</span></>
+          )}
+        </button>
+      </div>
     </div>
   )
 }
