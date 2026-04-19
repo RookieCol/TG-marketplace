@@ -37,9 +37,7 @@ services:
   bot:
     build:
       context: .
-      dockerfile: docker/Dockerfile
-      target: deps
-    command: npx tsx scripts/run-bot.ts
+      dockerfile: docker/Dockerfile.bot
     volumes:
       - .:/app
       - /app/node_modules
