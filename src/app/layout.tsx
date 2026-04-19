@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
 import Script from 'next/script'
-import { MaterialProvider } from '@/components/material-provider'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'GreenStore',
+  title: 'TG Market',
   description: 'Tu tienda de confianza',
 }
 
@@ -17,10 +16,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="beforeInteractive"
         />
       </head>
-      <body className="min-h-screen max-w-md mx-auto">
-        <MaterialProvider>
-          {children}
-        </MaterialProvider>
+      <body className="min-h-screen max-w-md mx-auto" style={{ background: 'var(--bg)' }}>
+        {children}
       </body>
     </html>
   )

@@ -1,66 +1,22 @@
 @import "tailwindcss";
 
-/* Material Design 3 dark theme tokens */
 :root {
-  /* Primary (accent) */
-  --md-sys-color-primary: #c9f04a;
-  --md-sys-color-on-primary: #000000;
-  --md-sys-color-primary-container: #3a4a00;
-  --md-sys-color-on-primary-container: #c9f04a;
-
-  /* Background & Surface */
-  --md-sys-color-background: #0d0d0d;
-  --md-sys-color-on-background: #ffffff;
-  --md-sys-color-surface: #1a1a1a;
-  --md-sys-color-on-surface: #ffffff;
-  --md-sys-color-surface-variant: #222222;
-  --md-sys-color-on-surface-variant: #888888;
-  --md-sys-color-surface-container: #1a1a1a;
-  --md-sys-color-surface-container-high: #222222;
-  --md-sys-color-surface-container-highest: #2a2a2a;
-
-  /* Outline */
-  --md-sys-color-outline: #2a2a2a;
-  --md-sys-color-outline-variant: #333333;
-
-  /* Error */
-  --md-sys-color-error: #cf6679;
-  --md-sys-color-on-error: #000000;
-
-  /* Secondary */
-  --md-sys-color-secondary: #888888;
-  --md-sys-color-on-secondary: #000000;
-
-  /* md-top-app-bar tokens */
-  --md-top-app-bar-container-color: #0d0d0d;
-  --md-top-app-bar-headline-color: #ffffff;
-
-  /* md-filled-button tokens */
-  --md-filled-button-container-color: #c9f04a;
-  --md-filled-button-label-text-color: #000000;
-  --md-filled-button-hover-label-text-color: #000000;
-  --md-filled-button-pressed-label-text-color: #000000;
-
-  /* md-outlined-button tokens */
-  --md-outlined-button-label-text-color: #c9f04a;
-  --md-outlined-button-outline-color: #c9f04a;
-
-  /* Custom vars for non-M3 elements */
-  --bg: #0d0d0d;
-  --surface: #1a1a1a;
-  --surface-2: #222222;
-  --accent: #c9f04a;
-  --accent-fg: #000000;
-  --text: #ffffff;
-  --text-muted: #888888;
-  --border: #2a2a2a;
-  --radius: 10px;
+  --bg:           #f5f5f5;
+  --surface:      #ffffff;
+  --border:       #e0e0e0;
+  --border-strong:#b0b0b0;
+  --text:         #0d0d0d;
+  --text-2:       #666666;
+  --text-3:       #999999;
+  --accent:       #c9f04a;
+  --accent-dark:  #8db200;
+  --radius:       2px;
 }
 
 body {
   background: var(--bg);
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
