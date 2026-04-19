@@ -18,13 +18,17 @@ export function ProductForm({ product, onSave, onCancel }: { product?: Product; 
   const handleSave = async () => {
     if (!name || !price) return
     setSaving(true)
-    const payload = { name, description, category, price_usd: parseFloat(price), image_url: imageUrl, active }
-    await fetch(product?.id ? `/api/admin/products/${product.id}` : '/api/admin/products', {
-      method: product?.id ? 'PATCH' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-    setSaving(false); onSave()
+    try {
+      const payload = { name, description, category, price_usd: parseFloat(price), image_url: imageUrl, active }
+      const res = await fetch(product?.id ? `/api/admin/products/${product.id}` : '/api/admin/products', {
+        method: product?.id ? 'PATCH' : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      if (res.ok) onSave()
+    } catch { /* network error */ } finally {
+      setSaving(false)
+    }
   }
 
   const ic = 'bg-[var(--surface-2)] text-white rounded-lg p-2.5 text-sm outline-none w-full'

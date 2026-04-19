@@ -13,9 +13,7 @@ export async function POST(req: NextRequest) {
   const session = await auth()
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const body = await req.json()
-  const [p] = await db.insert(products).values({
-    ...body,
-    price_usd: body.price_usd.toString(),
-  }).returning()
+  const { name, description, category, price_usd, image_url, active } = body
+  const [p] = await db.insert(products).values({ name, description, category, price_usd: price_usd.toString(), image_url, active }).returning()
   return NextResponse.json(p)
 }

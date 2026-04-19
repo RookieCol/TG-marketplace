@@ -25,12 +25,14 @@ interface Order {
 
 export function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => void }) {
   const handleStatus = async (status: OrderStatus) => {
-    await fetch(`/api/admin/orders/${order.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ status }),
-    })
-    onUpdate()
+    try {
+      const res = await fetch(`/api/admin/orders/${order.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      })
+      if (res.ok) onUpdate()
+    } catch { /* network error — silently ignore, state unchanged */ }
   }
   const nextStatus = NEXT[order.status]
 

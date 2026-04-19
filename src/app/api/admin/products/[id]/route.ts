@@ -11,8 +11,16 @@ export async function PATCH(
   if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   const { id } = await params
   const body = await req.json()
+  const { name, description, category, price_usd, image_url, active } = body
+  const updateData: Record<string, unknown> = {}
+  if (name !== undefined) updateData.name = name
+  if (description !== undefined) updateData.description = description
+  if (category !== undefined) updateData.category = category
+  if (price_usd !== undefined) updateData.price_usd = price_usd.toString()
+  if (image_url !== undefined) updateData.image_url = image_url
+  if (active !== undefined) updateData.active = active
   const [p] = await db.update(products)
-    .set({ ...body, price_usd: body.price_usd?.toString() })
+    .set(updateData as any)
     .where(eq(products.id, id))
     .returning()
   return NextResponse.json(p)

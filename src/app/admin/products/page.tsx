@@ -15,8 +15,10 @@ export default function AdminProductsPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Eliminar este producto?')) return
-    await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
-    load()
+    try {
+      const res = await fetch(`/api/admin/products/${id}`, { method: 'DELETE' })
+      if (res.ok) load()
+    } catch { /* network error */ }
   }
 
   return (

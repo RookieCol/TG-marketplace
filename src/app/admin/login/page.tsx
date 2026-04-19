@@ -13,7 +13,7 @@ export default function AdminLoginPage() {
   const handleLogin = async () => {
     setLoading(true); setError('')
     const res = await signIn('credentials', { email, password, redirect: false })
-    if (res?.error) { setError('Credenciales incorrectas'); setLoading(false); return }
+    if (!res || res.error) { setError('Credenciales incorrectas'); setLoading(false); return }
     router.push('/admin')
   }
 
