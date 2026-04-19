@@ -60,16 +60,17 @@ export default function CatalogPage() {
             }}
           >
             ⌁
-            {itemCount > 0 && (
-              <span style={{
+            <span
+              suppressHydrationWarning
+              style={{
                 position: 'absolute', top: -4, right: -4,
                 width: 14, height: 14,
                 background: 'var(--text)', color: 'var(--surface)',
                 fontSize: 8, fontWeight: 700,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                display: itemCount > 0 ? 'flex' : 'none',
+                alignItems: 'center', justifyContent: 'center',
                 borderRadius: 0,
-              }}>{itemCount}</span>
-            )}
+              }}>{itemCount || ''}</span>
           </button>
         </div>
       </div>
