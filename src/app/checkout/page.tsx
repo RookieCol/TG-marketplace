@@ -19,16 +19,21 @@ export default function CheckoutPage() {
   const handleSubmit = async () => {
     if (address.trim().length < 10) { setError('Dirección muy corta (mínimo 10 caracteres)'); return }
     setLoading(true); setError('')
-    const initData = window.Telegram?.WebApp?.initData ?? ''
-    const res = await fetch('/api/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ initData, items, delivery_address: address.trim(), delivery_note: note.trim() }),
-    })
-    const data = await res.json()
-    if (!res.ok) { setError(data.error ?? 'Error al crear pedido'); setLoading(false); return }
-    clear()
-    router.push(`/pay/${data.order.id}?uri=${encodeURIComponent(data.paymentUri)}&memo=${data.memo}`)
+    try {
+      const initData = window.Telegram?.WebApp?.initData ?? ''
+      const res = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ initData, items, delivery_address: address.trim(), delivery_note: note.trim() }),
+      })
+      const data = await res.json()
+      if (!res.ok) { setError(data.error ?? 'Error al crear pedido'); setLoading(false); return }
+      clear()
+      router.push(`/pay/${data.order.id}?uri=${encodeURIComponent(data.paymentUri)}&memo=${encodeURIComponent(data.memo)}`)
+    } catch {
+      setError('Error de red. Intenta de nuevo.')
+      setLoading(false)
+    }
   }
 
   return (

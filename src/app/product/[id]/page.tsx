@@ -19,6 +19,7 @@ export default function ProductDetailPage() {
     fetch('/api/products')
       .then((r) => r.json())
       .then((ps: Product[]) => setProduct(ps.find((p) => p.id === id) ?? null))
+      .catch(() => setProduct(null))
   }, [id])
 
   if (!product) return (
