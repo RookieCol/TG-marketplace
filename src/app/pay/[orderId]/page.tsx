@@ -19,7 +19,12 @@ function PayPageInner() {
   useEffect(() => {
     const match = paymentUri.match(/ton:\/\/transfer\/([^?]+)/)
     if (match) setTonAddress(match[1])
-    if (canvasRef.current && paymentUri) QRCode.toCanvas(canvasRef.current, paymentUri, { width: 180, margin: 2 })
+    if (canvasRef.current && paymentUri) {
+      QRCode.toCanvas(canvasRef.current, paymentUri, {
+        width: 180, margin: 2,
+        color: { dark: '#0d0d0d', light: '#ffffff' },
+      })
+    }
   }, [paymentUri])
 
   useEffect(() => {
@@ -28,43 +33,119 @@ function PayPageInner() {
         const res = await fetch(`/api/orders/${orderId}/status`)
         const data = await res.json()
         if (data.status === 'paid') { clearInterval(pollingRef.current!); router.push(`/confirm/${orderId}`) }
-      } catch { /* ignore network errors, keep polling */ }
+      } catch { /* keep polling */ }
     }, 5000)
     return () => { if (pollingRef.current) clearInterval(pollingRef.current) }
   }, [orderId, router])
 
   const handleCopy = () => navigator.clipboard.writeText(tonAddress)
 
+  if (expired) return (
+    <div style={{
+      minHeight: '100svh', background: 'var(--bg)',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      gap: 16, textAlign: 'center', padding: '0 24px',
+    }}>
+      <span style={{ fontSize: 40 }}>⏰</span>
+      <p style={{ color: 'var(--text-2)', fontSize: 13 }}>El tiempo de pago expiró</p>
+      <button
+        onClick={() => router.push('/catalog')}
+        style={{
+          background: 'var(--text)', color: 'var(--surface)',
+          border: 'none', cursor: 'pointer',
+          fontSize: 11, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase',
+          padding: '12px 24px', borderRadius: 'var(--radius)',
+        }}
+      >Volver al catálogo</button>
+    </div>
+  )
+
   return (
-    <div className="px-4 py-4 flex flex-col items-center gap-5 min-h-screen">
-      <div className="w-full flex items-center gap-2">
-        <h1 className="text-white font-bold text-lg">Pago del pedido</h1>
-        <span className="ml-auto text-sm">⏱ <CountdownTimer expiresAt={expiresAt} onExpire={() => setExpired(true)} /></span>
+    <div style={{ minHeight: '100svh', background: 'var(--bg)', display: 'flex', flexDirection: 'column' }}>
+
+      {/* Header */}
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '14px 16px', borderBottom: '1px solid var(--border)', background: 'var(--surface)',
+      }}>
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--text)' }}>
+          Pago USDT
+        </span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
+          <CountdownTimer expiresAt={expiresAt} onExpire={() => setExpired(true)} />
+        </span>
       </div>
-      {expired ? (
-        <div className="flex flex-col items-center gap-4 mt-8 text-center">
-          <span className="text-4xl">⏰</span>
-          <p className="text-[var(--text-muted)]">El tiempo de pago expiró</p>
-          <button onClick={() => router.push('/catalog')} className="bg-[var(--accent)] text-[var(--accent-fg)] font-bold px-6 py-3 rounded-[var(--radius)]">Volver al catálogo</button>
+
+      {/* Body */}
+      <div style={{ flex: 1, padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
+        <div style={{ alignSelf: 'flex-start' }}>
+          <p style={{ fontSize: 9, letterSpacing: '.16em', textTransform: 'uppercase', color: 'var(--text-3)', marginBottom: 6 }}>
+            Total a pagar
+          </p>
+          <p style={{ fontSize: 32, fontWeight: 700, color: 'var(--accent-dark)', lineHeight: 1 }}>
+            USDT · TON
+          </p>
+          {memo && (
+            <p style={{ fontSize: 11, color: 'var(--text-3)', marginTop: 4 }}>
+              Memo: <span style={{ fontFamily: 'monospace', color: 'var(--text-2)' }}>{memo}</span>
+            </p>
+          )}
         </div>
-      ) : (
-        <>
-          <div className="bg-white p-3 rounded-xl"><canvas ref={canvasRef} /></div>
-          <div className="bg-[var(--surface)] rounded-[var(--radius)] p-4 w-full text-center">
-            <p className="text-[var(--accent)] text-xl font-bold">USDT · TON</p>
-            <p className="text-[var(--text-muted)] text-xs mt-1">Memo: <span className="text-white font-mono">{memo}</span></p>
+
+        {/* QR */}
+        <div style={{
+          border: '1px solid var(--border-strong)',
+          background: 'var(--surface)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 8,
+        }}>
+          <canvas ref={canvasRef} />
+        </div>
+
+        {/* Wallet address */}
+        {tonAddress && (
+          <div style={{
+            width: '100%', background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            padding: '10px 12px',
+            display: 'flex', gap: 8, alignItems: 'center',
+          }}>
+            <span style={{
+              flex: 1, fontSize: 10, fontFamily: 'monospace',
+              color: 'var(--text-2)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+            }}>{tonAddress}</span>
+            <button
+              onClick={handleCopy}
+              style={{
+                fontSize: 9, letterSpacing: '.1em', textTransform: 'uppercase', fontWeight: 600,
+                color: 'var(--text)', background: 'transparent',
+                border: '1px solid var(--border-strong)', padding: '4px 8px', cursor: 'pointer',
+                borderRadius: 'var(--radius)',
+              }}
+            >Copiar</button>
           </div>
-          <div className="bg-[var(--surface)] rounded-[var(--radius)] p-3 w-full">
-            <p className="text-[var(--text-muted)] text-xs mb-1">Dirección</p>
-            <p className="text-white font-mono text-xs break-all">{tonAddress}</p>
-          </div>
-          <div className="flex gap-3 w-full">
-            <button onClick={handleCopy} className="flex-1 bg-[var(--accent)] text-[var(--accent-fg)] font-bold rounded-[var(--radius)] py-3 text-sm">Copiar dirección</button>
-            <button onClick={() => window.open(paymentUri, '_blank')} className="flex-1 bg-[var(--surface)] text-[var(--accent)] border border-[var(--accent)] font-semibold rounded-[var(--radius)] py-3 text-sm">Abrir wallet</button>
-          </div>
-          <p className="text-[var(--text-muted)] text-xs text-center">Detectamos el pago automáticamente. No cierres esta pantalla.</p>
-        </>
-      )}
+        )}
+
+        <p style={{ fontSize: 11, color: 'var(--text-3)', textAlign: 'center' }}>
+          Detectamos el pago automáticamente. No cierres esta pantalla.
+        </p>
+      </div>
+
+      {/* Footer */}
+      <div style={{ padding: '12px 16px', background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
+        <button
+          onClick={() => window.open(paymentUri, '_blank')}
+          style={{
+            width: '100%', height: 46,
+            background: 'var(--text)', color: 'var(--surface)',
+            border: 'none', cursor: 'pointer',
+            fontSize: 11, fontWeight: 700, letterSpacing: '.16em', textTransform: 'uppercase',
+            borderRadius: 'var(--radius)',
+          }}
+        >
+          ABRIR WALLET
+        </button>
+      </div>
     </div>
   )
 }
