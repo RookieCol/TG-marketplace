@@ -1,14 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { useCartStore } from '@/lib/cart'
+import { useCartStore, type Product } from '@/lib/cart'
 
 const EMOJI: Record<string, string> = {
   preroll: '🌿', gummy: '🍬', oil: '💧', other: '📦',
-}
-
-interface Product {
-  id: string; name: string; description: string; category: string;
-  price_usd: string | number; image_url: string; active: boolean;
 }
 
 interface Props {
@@ -23,7 +18,7 @@ export function ProductSheet({ product, onClose }: Props) {
   const total = (price * qty).toFixed(2)
 
   const handleAdd = () => {
-    for (let i = 0; i < qty; i++) addItem(product as any)
+    for (let i = 0; i < qty; i++) addItem(product)
     onClose()
   }
 
@@ -63,7 +58,7 @@ export function ProductSheet({ product, onClose }: Props) {
         }}>
           {product.image_url
             ? <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            : EMOJI[product.category] ?? '📦'}
+            : EMOJI[product.category as string] ?? '📦'}
         </div>
 
         {/* Scrollable body */}

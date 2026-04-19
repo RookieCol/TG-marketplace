@@ -9,12 +9,14 @@ export interface CartItem {
   qty: number
 }
 
-interface Product {
+export interface Product {
   id: string
   name: string
+  description?: string
+  category?: string
   price_usd: string | number
   image_url: string
-  [key: string]: unknown
+  active?: boolean
 }
 
 interface CartStore {

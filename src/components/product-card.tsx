@@ -1,13 +1,8 @@
 'use client'
-import { useCartStore } from '@/lib/cart'
+import { useCartStore, type Product } from '@/lib/cart'
 
 const EMOJI: Record<string, string> = {
   preroll: '🌿', gummy: '🍬', oil: '💧', other: '📦',
-}
-
-interface Product {
-  id: string; name: string; description: string; category: string;
-  price_usd: string | number; image_url: string; active: boolean;
 }
 
 export function ProductCard({ product, onClick }: { product: Product; onClick: () => void }) {
@@ -28,7 +23,7 @@ export function ProductCard({ product, onClick }: { product: Product; onClick: (
       }}>
         {product.image_url
           ? <img src={product.image_url} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          : EMOJI[product.category] ?? '📦'}
+          : EMOJI[product.category as string] ?? '📦'}
       </div>
 
       {/* Body */}
@@ -44,7 +39,7 @@ export function ProductCard({ product, onClick }: { product: Product; onClick: (
             ${Number(product.price_usd).toFixed(2)}
           </span>
           <button
-            onClick={(e) => { e.stopPropagation(); addItem(product as any) }}
+            onClick={(e) => { e.stopPropagation(); addItem(product) }}
             style={{
               width: 26, height: 26,
               background: 'var(--text)', color: 'var(--surface)',

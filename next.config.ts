@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ protocol: 'https', hostname: '**' }],
   },
+  allowedDevOrigins: ['192.168.2.16'],
 }
 
 export default nextConfig

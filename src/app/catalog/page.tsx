@@ -3,12 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ProductCard } from '@/components/product-card'
 import { ProductSheet } from '@/components/product-sheet'
-import { useCartStore } from '@/lib/cart'
-
-interface Product {
-  id: string; name: string; description: string; category: string;
-  price_usd: string | number; image_url: string; active: boolean;
-}
+import { useCartStore, type Product } from '@/lib/cart'
 
 type Category = 'all' | 'preroll' | 'gummy' | 'oil' | 'other'
 
