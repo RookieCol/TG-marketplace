@@ -20,7 +20,7 @@ export default function AdminOrdersPage() {
     <div className="flex flex-col gap-4">
       <h1 className="text-white font-bold text-xl">Pedidos</h1>
       {ordersList.length === 0
-        ? <p className="text-[var(--text-muted)]">No hay pedidos aún.</p>
+        ? <p className="text-[#888888]">No hay pedidos aún.</p>
         : ordersList.map((o) => <OrderCard key={o.id} order={o} onUpdate={load} />)
       }
     </div>

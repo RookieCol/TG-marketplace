@@ -23,7 +23,7 @@ export default function ProductDetailPage() {
   }, [id])
 
   if (!product) return (
-    <div className="flex items-center justify-center min-h-screen text-[var(--text-muted)]">Cargando...</div>
+    <div className="flex items-center justify-center min-h-screen text-[var(--text-2)]">Cargando...</div>
   )
 
   const handleAdd = () => {
@@ -33,7 +33,7 @@ export default function ProductDetailPage() {
 
   return (
     <div className="px-4 py-4 flex flex-col gap-4 min-h-screen">
-      <button onClick={() => router.back()} className="text-[var(--text-muted)] text-sm self-start">← Volver</button>
+      <button onClick={() => router.back()} className="text-[var(--text-2)] text-sm self-start">← Volver</button>
       <div className="bg-[var(--surface)] rounded-xl h-44 flex items-center justify-center text-7xl">
         {product.image_url
           ? <img src={product.image_url} alt={product.name} className="h-full w-full object-cover rounded-xl" />
@@ -41,9 +41,9 @@ export default function ProductDetailPage() {
       </div>
       <h1 className="text-white text-xl font-bold">{product.name}</h1>
       <div className="flex gap-2">
-        <span className="bg-[var(--surface)] text-[var(--text-muted)] text-xs px-3 py-1 rounded-full">{product.category}</span>
+        <span className="bg-[var(--surface)] text-[var(--text-2)] text-xs px-3 py-1 rounded-full">{product.category}</span>
       </div>
-      <p className="text-[var(--text-muted)] text-sm leading-relaxed">{product.description}</p>
+      <p className="text-[var(--text-2)] text-sm leading-relaxed">{product.description}</p>
       <div className="mt-auto flex items-center justify-between border-t border-[var(--border)] pt-4">
         <span className="text-[var(--accent)] text-2xl font-bold">${Number(product.price_usd).toFixed(2)}</span>
         <div className="flex items-center gap-3">

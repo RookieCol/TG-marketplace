@@ -37,12 +37,12 @@ export function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => v
   const nextStatus = NEXT[order.status]
 
   return (
-    <div className="bg-[var(--surface)] rounded-[var(--radius)] p-4 flex flex-col gap-3">
+    <div className="bg-[#1a1a1a] rounded-[8px] p-4 flex flex-col gap-3">
       <div className="flex items-center justify-between">
         <span className="text-white font-bold">#{order.order_number}</span>
         <span className={`text-xs px-2 py-1 rounded-full font-medium ${STATUS_COLOR[order.status]}`}>{STATUS_LABEL[order.status]}</span>
       </div>
-      <div className="text-[var(--text-muted)] text-xs">
+      <div className="text-[#888888] text-xs">
         <p>👤 @{order.telegram_username || order.telegram_user_id}</p>
         <p>📍 {order.delivery_address}</p>
       </div>
@@ -53,13 +53,13 @@ export function OrderCard({ order, onUpdate }: { order: Order; onUpdate: () => v
             <span className="text-[var(--accent)]">${(i.price * i.qty).toFixed(2)}</span>
           </div>
         ))}
-        <div className="border-t border-[var(--border)] pt-1 flex justify-between text-sm font-bold">
+        <div className="border-t border-[#2a2a2a] pt-1 flex justify-between text-sm font-bold">
           <span className="text-white">Total</span>
           <span className="text-[var(--accent)]">${Number(order.total_usd).toFixed(2)} USDT</span>
         </div>
       </div>
       {nextStatus && (
-        <button onClick={() => handleStatus(nextStatus)} className="bg-[var(--accent)] text-[var(--accent-fg)] text-sm font-bold rounded-lg py-2">
+        <button onClick={() => handleStatus(nextStatus)} className="bg-[#c9f04a] text-[#000000] text-sm font-bold rounded-lg py-2">
           Marcar: {STATUS_LABEL[nextStatus]}
         </button>
       )}

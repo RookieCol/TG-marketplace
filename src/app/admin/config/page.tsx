@@ -30,11 +30,11 @@ export default function AdminConfigPage() {
       <h1 className="text-white font-bold text-xl">Configuración</h1>
       {FIELDS.map((f) => (
         <div key={f.key} className="flex flex-col gap-1">
-          <label className="text-[var(--text-muted)] text-xs">{f.label}</label>
-          <input type={f.type} value={values[f.key] ?? ''} onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))} className="bg-[var(--surface)] text-white rounded-[var(--radius)] p-3 text-sm outline-none" />
+          <label className="text-[#888888] text-xs">{f.label}</label>
+          <input type={f.type} value={values[f.key] ?? ''} onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))} className="bg-[#1a1a1a] text-white rounded-[8px] p-3 text-sm outline-none" />
         </div>
       ))}
-      <button onClick={handleSave} className="bg-[var(--accent)] text-[var(--accent-fg)] font-bold rounded-[var(--radius)] py-3">
+      <button onClick={handleSave} className="bg-[#c9f04a] text-[#000000] font-bold rounded-[8px] py-3">
         {saved ? '✓ Guardado' : 'Guardar cambios'}
       </button>
     </div>
