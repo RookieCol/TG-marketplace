@@ -20,7 +20,11 @@ export default function CatalogPage() {
   const [all, setAll] = useState<Product[]>([])
   const [category, setCategory] = useState<Category>('all')
   const [sheet, setSheet] = useState<Product | null>(null)
-  const itemCount = useCartStore((s) => s.itemCount())
+  const [mounted, setMounted] = useState(false)
+  const storeCount = useCartStore((s) => s.itemCount())
+  const itemCount = mounted ? storeCount : 0
+
+  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     fetch('/api/products').then((r) => r.json()).then(setAll).catch(() => setAll([]))
