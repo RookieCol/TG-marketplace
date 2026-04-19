@@ -15,5 +15,5 @@ export function CountdownTimer({ expiresAt, onExpire }: { expiresAt: Date; onExp
   }, [expiresAt, onExpire])
   const mins = Math.floor(remaining / 60).toString().padStart(2, '0')
   const secs = (remaining % 60).toString().padStart(2, '0')
-  return <span className={remaining < 60 ? 'text-red-400' : 'text-[var(--text-muted)]'}>{mins}:{secs}</span>
+  return <span style={{ color: remaining < 60 ? '#e53935' : 'var(--text-3)' }}>{mins}:{secs}</span>
 }

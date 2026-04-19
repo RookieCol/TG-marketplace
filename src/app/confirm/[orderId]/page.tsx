@@ -8,7 +8,10 @@ export default function ConfirmPage() {
   const [order, setOrder] = useState<any>(null)
 
   useEffect(() => {
-    fetch(`/api/orders/${orderId}/status`).then((r) => r.json()).then((d) => setOrder(d.order))
+    fetch(`/api/orders/${orderId}/status`)
+      .then((r) => r.json())
+      .then((d) => setOrder(d.order))
+      .catch(() => {})
   }, [orderId])
 
   return (
@@ -43,7 +46,7 @@ export default function ConfirmPage() {
               <span style={{ fontSize: 9, letterSpacing: '.14em', textTransform: 'uppercase', color: 'var(--text-3)' }}>
                 Pedido #{order.order_number}
               </span>
-              {(order.items as any[]).map((item: any) => (
+              {(order?.items ?? []).map((item: any) => (
                 <div key={item.product_id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}>
                   <span style={{ color: 'var(--text-2)' }}>{item.name} ×{item.qty}</span>
                   <span style={{ color: 'var(--text)' }}>${(item.price * item.qty).toFixed(2)}</span>

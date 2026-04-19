@@ -122,7 +122,7 @@ function PayPageInner() {
                 border: '1px solid var(--border-strong)', padding: '4px 8px', cursor: 'pointer',
                 borderRadius: 'var(--radius)',
               }}
-            >Copiar</button>
+            >COPIAR</button>
           </div>
         )}
 
