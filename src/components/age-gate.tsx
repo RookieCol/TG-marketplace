@@ -43,10 +43,11 @@ export function AgeGate({ onConfirm }: { onConfirm: () => void }) {
           Tengo 18 años o más
         </button>
         <button
+          disabled
           style={{
             width: '100%', height: 48,
             background: 'transparent', color: 'var(--text-2)',
-            border: '1px solid var(--border)', cursor: 'default',
+            border: '1px solid var(--border)',
             fontSize: 11, fontWeight: 600, letterSpacing: '.12em', textTransform: 'uppercase',
             borderRadius: 'var(--radius)',
           }}
